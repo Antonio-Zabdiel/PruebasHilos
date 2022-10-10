@@ -9,7 +9,7 @@ public class Principal extends JFrame{
         
        setTitle("Juego");
        setDefaultCloseOperation(EXIT_ON_CLOSE);
-       setSize(900,550);
+       setSize(480,360);
        setLocationRelativeTo(null);
        setResizable(false);
        add(new Tablero());

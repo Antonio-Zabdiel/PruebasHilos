@@ -10,15 +10,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class Tablero extends JPanel implements Runnable{
     private final Image background;
-    private  Image tortuga;
-    private  Image liebre;
+    private  ArrayList<Folk> folks;
     private Thread hilo;
+    private Rectangle stage;
     
     private  int x,y;
     
@@ -26,41 +28,36 @@ public class Tablero extends JPanel implements Runnable{
         
         setBackground(Color.WHITE);
         setDoubleBuffered(true);
-        background = new ImageIcon(this.getClass().getResource("/img/paisaje1.png")).getImage();
-        x=800;
-        y=300;
-        tortuga();
-        liebre();
+        background = new ImageIcon(this.getClass().getResource("/img/madonaStage.png")).getImage();
+        stage=new Rectangle(75,33,316,200);
+        folksInit();
         hilo = new Thread(this);
         hilo.start();
    }
     
-    void tortuga(){
-        tortuga = new ImageIcon(this.getClass().getResource("/img/tortuga.png")).getImage();
-        
-        
-    }
-    void liebre(){
-        liebre = new ImageIcon(this.getClass().getResource("/img/liebre.png")).getImage();
-       
+    void folksInit(){
+        folks=new ArrayList<Folk>();
+        for(int i=0;i<20;i++){
+            folks.add(new Folk(0,0,this));
+        }
     }
     
     @Override
     public void paint(Graphics g){
         super.paint(g);
         Graphics2D g2 = (Graphics2D)g;
-        g2.drawImage(background, 0,0, null);
-        g2.drawImage(tortuga,x,y, null);
-        g2.drawImage(liebre,x,y-200,null);
+        g2.drawImage(background, 0,0,getWidth(),getHeight(), null);
+        g2.setColor(Color.red);
+        g2.fill(stage);
+        for(Folk i : folks){
+            i.draw(g2);
+        }
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
     
     public void ciclo(){
-        x += 100;
-        if ( x > 800 ){
-            x = -200;
-        }
+        
     }
     
     @Override
@@ -68,11 +65,8 @@ public class Tablero extends JPanel implements Runnable{
         while(true){
             ciclo();
             repaint();
-            
-      
             try{
-                Thread.sleep(100);
-            
+                Thread.sleep(16);
             }catch(Exception e){
                 System.out.println(e);
             }
