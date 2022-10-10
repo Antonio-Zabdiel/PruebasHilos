@@ -14,8 +14,9 @@ import javax.swing.ImageIcon;
  */
 public class Folk {
     private Image sprite;
-    private int x,y;
+    private int x,y,xDesp,yDesp;
     private Tablero tablero;
+    public boolean die=false;
     
     public Folk(int x, int y, Tablero tablero){
         this.x=x;
@@ -41,7 +42,16 @@ public class Folk {
     }
     
     public void tick(){
-        
+        xDesp=(int)(Math.random()*10)-1;
+        moveX(xDesp);
+        yDesp+=(int)(Math.random()*10)-1;
+        moveY(yDesp);
+        if(x<0||x+sprite.getWidth(null)>tablero.getWidth()){
+            die=true;
+        }
+        if(y<0||y+sprite.getHeight(null)>tablero.getHeight()){
+            die=true;
+        }
     }
     
     public void draw(Graphics g) {

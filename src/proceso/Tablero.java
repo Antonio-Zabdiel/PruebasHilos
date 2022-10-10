@@ -18,9 +18,10 @@ import javax.swing.JPanel;
 
 public class Tablero extends JPanel implements Runnable{
     private final Image background;
-    private  ArrayList<Folk> folks;
+    public  ArrayList<Folk> folks;
     private Thread hilo;
     private Rectangle stage;
+    
     
     private  int x,y;
     
@@ -49,15 +50,17 @@ public class Tablero extends JPanel implements Runnable{
         g2.drawImage(background, 0,0,getWidth(),getHeight(), null);
         g2.setColor(Color.red);
         g2.fill(stage);
-        for(Folk i : folks){
-            i.draw(g2);
+        for(Folk f : folks){
+            f.draw(g2);
         }
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
     
     public void ciclo(){
-        
+        for(Folk f : folks){
+            f.tick();
+        }
     }
     
     @Override
@@ -71,5 +74,8 @@ public class Tablero extends JPanel implements Runnable{
                 System.out.println(e);
             }
         }
+    }
+    public boolean full(){
+        return false;
     }
 }
