@@ -52,6 +52,9 @@ public class Folk {
         if(y<0||y+sprite.getHeight(null)>tablero.getHeight()){
             yDesp=yDesp*(-1);
         }
+        if((y<tablero.stage.y||y+sprite.getHeight(null)>tablero.stage.y+tablero.stage.height)&&inStage){
+            yDesp=yDesp*(-1);
+        }
         for(Door d: tablero.doors){
             if(d.hitbox.contains(x,y)){
                 if(!inDoor){

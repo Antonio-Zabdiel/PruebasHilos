@@ -35,8 +35,8 @@ public class Tablero extends JPanel implements Runnable{
         background = new ImageIcon(this.getClass().getResource("/img/madonaStage.png")).getImage();
         stage=new Rectangle(75,33,316,200);
         doors=new Door[2];
-        doors[0]=new Door(384,33,10,50,true);
-        doors[1]=new Door(70,33,10,50,false);
+        doors[0]=new Door(384,33,10,50,true,this);
+        doors[1]=new Door(70,33,10,50,false,this);
         folksInit();
         hilo = new Thread(this);
         hilo.start();
@@ -90,8 +90,17 @@ public class Tablero extends JPanel implements Runnable{
         return false;
     }
     public void addFolk(Folk newFolk){
-        folksIn[lastFolk()]=newFolk;
-        System.out.println("table "+lastFolk()+" "+folksIn.length);
+        if(!full){
+            folksIn[lastFolk()]=newFolk;
+            System.out.println("table "+lastFolk()+" "+folksIn.length);
+        }
+    }
+    public void removeFolk(Folk folk){
+        for(int i=0;i<folksIn.length;i++){
+            if(folksIn[i]==folk){
+                folksIn[i]=null;
+            }
+        }
     }
     public int lastFolk(){
         int i=0;
