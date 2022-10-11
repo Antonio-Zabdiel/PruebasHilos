@@ -15,18 +15,23 @@ import javax.swing.ImageIcon;
  */
 public class Folk {
     public Image sprite;
-    public int x,y,xDesp,yDesp;
+    public int x,y,xDesp,yDesp,width,height;
     private Tablero tablero;
-    public boolean inDoor=false,inStage=false;
-    public Rectangle box;
+    public boolean inDoor=false;
+    public int id=-1;
+    public Rectangle hitbox;
     
-    public Folk(int x, int y, Tablero tablero){
+    public Folk(int x, int y, Tablero tablero,int id){
         this.x=x;
         this.y=y;
+        this.id=id;
         xDesp=(int)(Math.random()*10)-5;
         yDesp+=(int)(Math.random()*10)-5;
         this.tablero=tablero;
         sprite = new ImageIcon(this.getClass().getResource("/img/stickPixel.png")).getImage();
+        width=sprite.getWidth(null);
+        height=sprite.getHeight(null);
+        hitbox=new Rectangle(x,y,width,height);
     }
 
     public int getX() {
@@ -49,25 +54,27 @@ public class Folk {
         if(x<0||x+sprite.getWidth(null)>tablero.getWidth()){
             xDesp=xDesp*(-1);
         }
-        if((y<0||y+sprite.getHeight(null)>tablero.getHeight())
-                ||((y<tablero.stage.y||y+sprite.getHeight(null)>tablero.stage.y+tablero.stage.height)&&inStage)){
+        if(y<0||y+sprite.getHeight(null)>tablero.getHeight()){
             yDesp=yDesp*(-1);
         }
-        for(Door d: tablero.doors){
-            if(d.hitbox.contains(x,y)){
-                if(!inDoor){
-                    d.addFolk(this);
-                    inDoor=true;
+        moveX(xDesp);
+        moveY(yDesp);
+        hitbox.x=x;
+        hitbox.y=y;
+        for(Door d:tablero.doors){
+            if(d!=null){
+                if(hitbox.intersects(d.hitbox)){
+                    kill();
                 }
             }
-        }
-        if(!inDoor){
-            moveX(xDesp);
-            moveY(yDesp);
         }
     }
     
     public void draw(Graphics g) {
         g.drawImage(sprite, x, y, null);
+    }
+    public void kill(){
+        System.out.println("im die "+id);
+        tablero.folks[id]=null;
     }
 }

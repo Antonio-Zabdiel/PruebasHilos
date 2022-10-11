@@ -15,42 +15,17 @@ public class Door {
         this.left=left;
         this.tablero=tablero;
     }
-    public void addFolk(Folk newFolk){
-        if(lastFolk()==folks.length){
-            release();
-        }
-        folks[lastFolk()]=newFolk;
-        System.out.println("door "+lastFolk()+" "+folks.length);
-    }
-    public int lastFolk(){
-        int i=0;
-        for(i=0;i<folks.length;i++){
-            if(folks[i]==null){
-                break;
-            }
-        }
-        return i;
-    }
     public void release(){
         for(int i=0;i<folks.length;i++){
-            folks[i].inDoor=false;
-            folks[i].inStage=!folks[i].inStage;
-            int shoot=Math.abs(folks[i].xDesp);
-            if(left){
-                shoot=shoot*(-1);
-            }
-            if(!folks[i].inStage){
-                shoot=shoot*(-1);
-            }
-            if(folks[i].inStage){
-                tablero.addFolk(folks[i]);
-            }else{
-                tablero.removeFolk(folks[i]);
-            }
-            folks[i].xDesp=shoot;
-            folks[i].moveY(hitbox.height+folks[i].sprite.getHeight(tablero));
-            folks[i].moveY(hitbox.height+folks[i].sprite.getHeight(tablero));
-            folks[i]=null;
+            
+        }
+    }
+    public void tick(){
+        if(!tablero.full(tablero.delta)){
+            int desp=hitbox.width*2;
+            if(!left)
+                desp=desp*(-1);
+            tablero.add(hitbox.x+desp, hitbox.y+(hitbox.height/2));
         }
     }
 }

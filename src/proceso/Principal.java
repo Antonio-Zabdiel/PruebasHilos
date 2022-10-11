@@ -12,7 +12,7 @@ public class Principal extends JFrame{
        setSize(480,360);
        setLocationRelativeTo(null);
        setResizable(false);
-       add(new Tablero());
+       add(new Tablero(getWidth(),getHeight()));
        setVisible(true);
     }
     

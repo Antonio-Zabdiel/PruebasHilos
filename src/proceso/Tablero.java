@@ -18,36 +18,32 @@ import javax.swing.JPanel;
 
 public class Tablero extends JPanel implements Runnable{
     private final Image background;
-    public  ArrayList<Folk> folks;
-    public Folk[] folksIn;
+    public Folk folks[];
     private Thread hilo;
-    public Rectangle stage;
     public Door doors[];
     public boolean full=false;
+    public int delta=2;
+    public int max=10;
     
     
     private  int x,y;
     
-    public Tablero(){
+    public Tablero(int width, int height){
         
         setBackground(Color.WHITE);
         setDoubleBuffered(true);
-        background = new ImageIcon(this.getClass().getResource("/img/madonaStage.png")).getImage();
-        stage=new Rectangle(75,33,316,200);
+        background = new ImageIcon(this.getClass().getResource("/img/cropedMadona.png")).getImage();
         doors=new Door[2];
-        doors[0]=new Door(384,33,10,50,true,this);
-        doors[1]=new Door(70,33,10,50,false,this);
+        doors[0]=new Door(0,33,10,200,true,this);
+        doors[1]=new Door(width-25,33,10,200,false,this);
         folksInit();
         hilo = new Thread(this);
         hilo.start();
    }
     
     void folksInit(){
-        folks=new ArrayList<Folk>();
-        folksIn=new Folk[10];
-        for(int i=0;i<20;i++){
-            folks.add(new Folk(0,0,this));
-        }
+        folks=new Folk[max];
+        add(50,0);
     }
     
     @Override
@@ -55,12 +51,11 @@ public class Tablero extends JPanel implements Runnable{
         super.paint(g);
         Graphics2D g2 = (Graphics2D)g;
         g2.drawImage(background, 0,0,getWidth(),getHeight(), null);
-        g2.setColor(Color.red);
-        g2.fill(stage);
         g2.setColor(Color.PINK);
         g2.fill(doors[0].hitbox);
         g2.fill(doors[1].hitbox);
         for(Folk f : folks){
+            if(f!=null)
             f.draw(g2);
         }
         Toolkit.getDefaultToolkit().sync();
@@ -68,10 +63,17 @@ public class Tablero extends JPanel implements Runnable{
     }
     
     public void ciclo(){
+        
         for(Folk f : folks){
-            f.tick();
+            if(f!=null)
+                f.tick();
         }
-        full=lastFolk()==folksIn.length;
+        full=(lastFolk()==folks.length);
+        for(Door d:doors){
+            if(d!=null)
+                d.tick();
+        }
+        clean();
     }
     
     @Override
@@ -86,31 +88,43 @@ public class Tablero extends JPanel implements Runnable{
             }
         }
     }
-    public boolean full(){
-        return false;
-    }
-    public void addFolk(Folk newFolk){
-        if(!full){
-            if(lastFolk()!=folksIn.length){
-                folksIn[lastFolk()]=newFolk;
-                System.out.println("table "+lastFolk()+" "+folksIn.length);
-            }
-        }
-    }
-    public void removeFolk(Folk folk){
-        for(int i=0;i<folksIn.length;i++){
-            if(folksIn[i]==folk){
-                folksIn[i]=null;
-            }
-        }
-    }
     public int lastFolk(){
         int i=0;
-        for(i=0;i<folksIn.length;i++){
-            if(folksIn[i]==null){
+        for(i=0;i<folks.length-1;i++){
+            if(folks[i]==null){
                 break;
             }
         }
         return i;
+    }
+    public int lastFolk2(){
+        int i=0;
+        for(i=folks.length-1;i>0;i--){
+            if(folks[i]!=null){
+                break;
+            }
+        }
+        return i+1;
+    }
+    public void add(int x, int y){
+        int l=lastFolk();
+        for(int i=0;i<delta;i++){
+            folks[i+l]=new Folk(x,y,this,i+l);
+        }
+    }
+    public boolean full(int add){
+        return lastFolk()+add>=folks.length;
+    }
+    public void clean(){
+        for(int i=0;i<folks.length;i++){
+            
+            if(folks[i]==null&&lastFolk()!=lastFolk2()){
+                folks[i]=folks[lastFolk2()];
+                folks[i].id=i;
+                folks[lastFolk2()]=null;
+                System.out.println("i"+i);
+                folks[i].id=i;
+            }
+        }
     }
 }
