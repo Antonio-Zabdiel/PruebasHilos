@@ -35,7 +35,7 @@ public class Door {
         for(int i=0;i<folks.length;i++){
             folks[i].inDoor=false;
             folks[i].inStage=!folks[i].inStage;
-            int shoot=10;
+            int shoot=Math.abs(folks[i].xDesp);
             if(left){
                 shoot=shoot*(-1);
             }
@@ -48,7 +48,8 @@ public class Door {
                 tablero.removeFolk(folks[i]);
             }
             folks[i].xDesp=shoot;
-            folks[i].moveY(hitbox.height);
+            folks[i].moveY(hitbox.height+folks[i].sprite.getHeight(tablero));
+            folks[i].moveY(hitbox.height+folks[i].sprite.getHeight(tablero));
             folks[i]=null;
         }
     }

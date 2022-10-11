@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
  * @author PC
  */
 public class Folk {
-    private Image sprite;
+    public Image sprite;
     public int x,y,xDesp,yDesp;
     private Tablero tablero;
     public boolean inDoor=false,inStage=false;
@@ -49,10 +49,8 @@ public class Folk {
         if(x<0||x+sprite.getWidth(null)>tablero.getWidth()){
             xDesp=xDesp*(-1);
         }
-        if(y<0||y+sprite.getHeight(null)>tablero.getHeight()){
-            yDesp=yDesp*(-1);
-        }
-        if((y<tablero.stage.y||y+sprite.getHeight(null)>tablero.stage.y+tablero.stage.height)&&inStage){
+        if((y<0||y+sprite.getHeight(null)>tablero.getHeight())
+                ||((y<tablero.stage.y||y+sprite.getHeight(null)>tablero.stage.y+tablero.stage.height)&&inStage)){
             yDesp=yDesp*(-1);
         }
         for(Door d: tablero.doors){
