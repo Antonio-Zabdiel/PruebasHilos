@@ -91,8 +91,10 @@ public class Tablero extends JPanel implements Runnable{
     }
     public void addFolk(Folk newFolk){
         if(!full){
-            folksIn[lastFolk()]=newFolk;
-            System.out.println("table "+lastFolk()+" "+folksIn.length);
+            if(lastFolk()!=folksIn.length){
+                folksIn[lastFolk()]=newFolk;
+                System.out.println("table "+lastFolk()+" "+folksIn.length);
+            }
         }
     }
     public void removeFolk(Folk folk){
