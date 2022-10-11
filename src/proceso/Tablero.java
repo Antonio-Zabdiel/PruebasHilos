@@ -20,7 +20,8 @@ public class Tablero extends JPanel implements Runnable{
     private final Image background;
     public  ArrayList<Folk> folks;
     private Thread hilo;
-    private Rectangle stage;
+    public Rectangle stage;
+    public Door doors[];
     
     
     private  int x,y;
@@ -31,6 +32,9 @@ public class Tablero extends JPanel implements Runnable{
         setDoubleBuffered(true);
         background = new ImageIcon(this.getClass().getResource("/img/madonaStage.png")).getImage();
         stage=new Rectangle(75,33,316,200);
+        doors=new Door[2];
+        doors[0]=new Door(384,33,10,50);
+        doors[1]=new Door(70,33,10,50);
         folksInit();
         hilo = new Thread(this);
         hilo.start();
@@ -50,6 +54,9 @@ public class Tablero extends JPanel implements Runnable{
         g2.drawImage(background, 0,0,getWidth(),getHeight(), null);
         g2.setColor(Color.red);
         g2.fill(stage);
+        g2.setColor(Color.PINK);
+        g2.fill(doors[0].hitbox);
+        g2.fill(doors[1].hitbox);
         for(Folk f : folks){
             f.draw(g2);
         }
