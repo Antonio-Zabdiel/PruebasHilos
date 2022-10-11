@@ -15,7 +15,7 @@ import javax.swing.ImageIcon;
  */
 public class Folk {
     private Image sprite;
-    private int x,y,xDesp,yDesp;
+    public int x,y,xDesp,yDesp;
     private Tablero tablero;
     public boolean inDoor=false,inStage=false;
     public Rectangle box;
