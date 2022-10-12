@@ -77,10 +77,8 @@ public class Tablero extends JPanel implements Runnable{
             label1.paint(g2);
         for(int f=0;f<folks.length;f++){
             if(folks[f]!=null){
+                folks[f].id=f;
                 folks[f].tick();
-                if(folks[f]!=null){
-                    folks[f].id=f;
-                }
             }
         }
         full=(lastFolk()==folks.length);
@@ -89,6 +87,8 @@ public class Tablero extends JPanel implements Runnable{
                 d.tick();
         }
         clean();
+        
+            System.out.println(lastFolk()+" "+lastFolk2());
     }
     
     @Override
@@ -141,11 +141,12 @@ public class Tablero extends JPanel implements Runnable{
     }
     public void clean(){
         for(int i=0;i<folks.length;i++){
-            
-            if(folks[i]==null&&lastFolk()-1!=lastFolk2()){
+            if(folks[i]==null
+                    //&&lastFolk()!=lastFolk2()
+                    ){
                 folks[i]=new Folk(0,100,this,0);
-                folks[i]=folks[lastFolk2()];
-                folks[lastFolk2()].killNoWitness();
+                folks[i].set(folks[lastFolk()-1]);
+                folks[lastFolk()-1].killNoWitness();
                 folks[i].id=i;
             }
         }
