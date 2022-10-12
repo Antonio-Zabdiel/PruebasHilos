@@ -23,7 +23,7 @@ public class Tablero extends JPanel implements Runnable{
     private Thread hilo;
     public Door doors[];
     public boolean full=false;
-    public int delta=200;
+    public int delta=20;
     public int max=1000;
     JLabel label1;
     Graphics2D g2;
