@@ -26,12 +26,26 @@ public class Folk {
         this.y=y;
         this.id=id;
         xDesp=(int)(Math.random()*10)-5;
+        while(xDesp==0)
+            xDesp=(int)(Math.random()*10)-5;
         yDesp+=(int)(Math.random()*10)-5;
+        while(yDesp==0)
+            yDesp=(int)(Math.random()*10)-5;
         this.tablero=tablero;
         sprite = new ImageIcon(this.getClass().getResource("/img/stickPixel.png")).getImage();
         width=sprite.getWidth(null);
         height=sprite.getHeight(null);
         hitbox=new Rectangle(x,y,width,height);
+    }
+    public void set(Folk f){
+        this.x=f.x;
+        this.y=f.y;
+        this.hitbox=f.hitbox;
+        this.id=f.id;
+        this.inDoor=f.inDoor;
+        this.tablero=f.tablero;
+        this.xDesp=f.xDesp;
+        this.yDesp=f.yDesp;
     }
 
     public int getX() {

@@ -14,6 +14,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Tablero extends JPanel implements Runnable{
@@ -22,14 +23,18 @@ public class Tablero extends JPanel implements Runnable{
     private Thread hilo;
     public Door doors[];
     public boolean full=false;
-    public int delta=2;
-    public int max=10;
-    
+    public int delta=20;
+    public int max=501;
+    JLabel label1;
     
     private  int x,y;
     
     public Tablero(int width, int height){
-        
+        label1 = new JLabel();
+        setLocation(100, 100);
+        label1.setText("0");
+        label1.setBounds(0, 0, 200, 50);
+        add(label1);
         setBackground(Color.WHITE);
         setDoubleBuffered(true);
         background = new ImageIcon(this.getClass().getResource("/img/cropedMadona.png")).getImage();
@@ -58,6 +63,7 @@ public class Tablero extends JPanel implements Runnable{
             if(f!=null)
             f.draw(g2);
         }
+        label1.paint(g2);
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
@@ -74,6 +80,7 @@ public class Tablero extends JPanel implements Runnable{
                 d.tick();
         }
         clean();
+        label1.setText("num: "+Integer.toString(lastFolk2()));
     }
     
     @Override
@@ -104,7 +111,7 @@ public class Tablero extends JPanel implements Runnable{
                 break;
             }
         }
-        return i+1;
+        return i;
     }
     public void add(int x, int y){
         int l=lastFolk();
@@ -113,15 +120,15 @@ public class Tablero extends JPanel implements Runnable{
         }
     }
     public boolean full(int add){
-        return lastFolk()+add>=folks.length;
+        return lastFolk()+add>folks.length;
     }
     public void clean(){
         for(int i=0;i<folks.length;i++){
             
             if(folks[i]==null&&lastFolk()!=lastFolk2()){
+                folks[i]=new Folk(0,0,this,0);
                 folks[i]=folks[lastFolk2()];
-                folks[i].id=i;
-                folks[lastFolk2()]=null;
+                folks[lastFolk2()].kill();
                 System.out.println("i"+i);
                 folks[i].id=i;
             }
