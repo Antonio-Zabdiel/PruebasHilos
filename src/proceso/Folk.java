@@ -25,10 +25,10 @@ public class Folk {
         this.x=x;
         this.y=y;
         this.id=id;
-        xDesp=(int)(Math.random()*10)-5;
+        xDesp=(int)(Math.random()*16)-5;
         while(xDesp==0)
             xDesp=(int)(Math.random()*10)-5;
-        yDesp+=(int)(Math.random()*10)-5;
+        yDesp+=(int)(Math.random()*16)-8;
         while(yDesp==0)
             yDesp=(int)(Math.random()*10)-5;
         this.tablero=tablero;
@@ -89,6 +89,9 @@ public class Folk {
     }
     public void kill(){
         System.out.println("im die "+id);
+        tablero.folks[id]=null;
+    }
+    public void killNoWitness(){
         tablero.folks[id]=null;
     }
 }

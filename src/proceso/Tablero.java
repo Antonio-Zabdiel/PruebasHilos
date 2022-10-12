@@ -23,13 +23,15 @@ public class Tablero extends JPanel implements Runnable{
     private Thread hilo;
     public Door doors[];
     public boolean full=false;
-    public int delta=20;
-    public int max=501;
+    public int delta=200;
+    public int max=1000;
     JLabel label1;
+    Graphics2D g2;
     
     private  int x,y;
     
     public Tablero(int width, int height){
+        max++;
         label1 = new JLabel();
         setLocation(100, 100);
         label1.setText("0");
@@ -40,7 +42,7 @@ public class Tablero extends JPanel implements Runnable{
         background = new ImageIcon(this.getClass().getResource("/img/cropedMadona.png")).getImage();
         doors=new Door[2];
         doors[0]=new Door(0,33,10,200,true,this);
-        doors[1]=new Door(width-25,33,10,200,false,this);
+        doors[1]=new Door(width-15,33,10,200,false,this);
         folksInit();
         hilo = new Thread(this);
         hilo.start();
@@ -48,13 +50,12 @@ public class Tablero extends JPanel implements Runnable{
     
     void folksInit(){
         folks=new Folk[max];
-        add(50,0);
     }
     
     @Override
     public void paint(Graphics g){
         super.paint(g);
-        Graphics2D g2 = (Graphics2D)g;
+        g2 = (Graphics2D)g;
         g2.drawImage(background, 0,0,getWidth(),getHeight(), null);
         g2.setColor(Color.PINK);
         g2.fill(doors[0].hitbox);
@@ -70,9 +71,17 @@ public class Tablero extends JPanel implements Runnable{
     
     public void ciclo(){
         
-        for(Folk f : folks){
-            if(f!=null)
-                f.tick();
+        label1.setText("num: "+Integer.toString(lastFolkLabel()));
+        System.out.println("num: "+Integer.toString(lastFolkLabel()));
+        if(g2!=null)
+            label1.paint(g2);
+        for(int f=0;f<folks.length;f++){
+            if(folks[f]!=null){
+                folks[f].tick();
+                if(folks[f]!=null){
+                    folks[f].id=f;
+                }
+            }
         }
         full=(lastFolk()==folks.length);
         for(Door d:doors){
@@ -80,7 +89,6 @@ public class Tablero extends JPanel implements Runnable{
                 d.tick();
         }
         clean();
-        label1.setText("num: "+Integer.toString(lastFolk2()));
     }
     
     @Override
@@ -89,7 +97,7 @@ public class Tablero extends JPanel implements Runnable{
             ciclo();
             repaint();
             try{
-                Thread.sleep(16);
+                Thread.sleep(20);
             }catch(Exception e){
                 System.out.println(e);
             }
@@ -97,7 +105,16 @@ public class Tablero extends JPanel implements Runnable{
     }
     public int lastFolk(){
         int i=0;
-        for(i=0;i<folks.length-1;i++){
+        for(i=1;i<folks.length-1;i++){
+            if(folks[i]==null){
+                break;
+            }
+        }
+        return i;
+    }
+    public int lastFolkLabel(){
+        int i=0;
+        for(i=1;i<folks.length-1;i++){
             if(folks[i]==null){
                 break;
             }
@@ -125,11 +142,10 @@ public class Tablero extends JPanel implements Runnable{
     public void clean(){
         for(int i=0;i<folks.length;i++){
             
-            if(folks[i]==null&&lastFolk()!=lastFolk2()){
-                folks[i]=new Folk(0,0,this,0);
+            if(folks[i]==null&&lastFolk()-1!=lastFolk2()){
+                folks[i]=new Folk(0,100,this,0);
                 folks[i]=folks[lastFolk2()];
-                folks[lastFolk2()].kill();
-                System.out.println("i"+i);
+                folks[lastFolk2()].killNoWitness();
                 folks[i].id=i;
             }
         }

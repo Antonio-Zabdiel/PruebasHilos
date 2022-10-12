@@ -22,10 +22,11 @@ public class Door {
     }
     public void tick(){
         if(!tablero.full(tablero.delta)){
-            int desp=hitbox.width*2;
+            int desp=hitbox.width*3;
             if(!left)
                 desp=desp*(-1);
             tablero.add(hitbox.x+desp, hitbox.y+(hitbox.height/2));
+            tablero.folks[tablero.lastFolk()-1].xDesp=desp;
         }
     }
 }
